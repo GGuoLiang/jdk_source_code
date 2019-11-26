@@ -2,7 +2,8 @@
 target
 out
 classes
-
+.xml
+.iml
 .classpath
 .project
 .settings/

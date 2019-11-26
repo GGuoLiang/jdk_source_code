@@ -1,7 +1,6 @@
 .idea
 target
 out
-bscrm_service.iml
 classes
 
 .classpath

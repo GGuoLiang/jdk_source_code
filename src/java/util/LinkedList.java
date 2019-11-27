@@ -961,6 +961,7 @@ public class LinkedList<E>
             nextIndex = index;
         }
 
+        //  判断下标跟节点数量大小
         public boolean hasNext() {
             return nextIndex < size;
         }
@@ -1013,6 +1014,7 @@ public class LinkedList<E>
             expectedModCount++;
         }
 
+        // set的next() 方法之后 lastReturned表示的节点
         public void set(E e) {
             if (lastReturned == null)
                 throw new IllegalStateException();
@@ -1020,6 +1022,7 @@ public class LinkedList<E>
             lastReturned.item = e;
         }
 
+        // 添加是添加在节点next表示的当前节点前面
         public void add(E e) {
             checkForComodification();
             lastReturned = null;
@@ -1077,7 +1080,7 @@ public class LinkedList<E>
      */
 
     /*
-      Descending 下降
+      Descending 下降   向前遍历的节点   其实的index下标为当前链表size
      */
     private class DescendingIterator implements Iterator<E> {
         private final ListItr itr = new ListItr(size());
@@ -1260,6 +1263,8 @@ public class LinkedList<E>
         return new LLSpliterator<E>(this, -1, 0);
     }
 
+
+    //  并行遍历迭代器
     /** A customized variant of Spliterators.IteratorSpliterator */
     static final class LLSpliterator<E> implements Spliterator<E> {
         static final int BATCH_UNIT = 1 << 10;  // batch array size increment

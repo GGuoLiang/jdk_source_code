@@ -306,6 +306,7 @@ public interface Spliterator<T> {
      * upon entry to this method, else {@code true}.
      * @throws NullPointerException if the specified action is null
      */
+    //单个对元素执行给定的动作，如果有剩下元素未处理返回true，否则返回false
     boolean tryAdvance(Consumer<? super T> action);
 
     /**
@@ -322,6 +323,7 @@ public interface Spliterator<T> {
      * @param action The action
      * @throws NullPointerException if the specified action is null
      */
+    //对每个剩余元素执行给定的动作，依次处理，直到所有元素已被处理或被异常终止。默认方法调用tryAdvance方法
     default void forEachRemaining(Consumer<? super T> action) {
         do { } while (tryAdvance(action));
     }
@@ -367,6 +369,7 @@ public interface Spliterator<T> {
      * @return a {@code Spliterator} covering some portion of the
      * elements, or {@code null} if this spliterator cannot be split
      */
+    //对任务分割，返回一个新的Spliterator迭代器
     Spliterator<T> trySplit();
 
     /**
@@ -392,6 +395,7 @@ public interface Spliterator<T> {
      * @return the estimated size, or {@code Long.MAX_VALUE} if infinite,
      *         unknown, or too expensive to compute.
      */
+    //用于估算还剩下多少个元素需要遍历
     long estimateSize();
 
     /**
@@ -404,6 +408,7 @@ public interface Spliterator<T> {
      *
      * @return the exact size, if known, else {@code -1}.
      */
+    //当迭代器拥有SIZED特征时，返回剩余元素个数；否则返回-1
     default long getExactSizeIfKnown() {
         return (characteristics() & SIZED) == 0 ? -1L : estimateSize();
     }
@@ -429,6 +434,7 @@ public interface Spliterator<T> {
      *
      * @return a representation of characteristics
      */
+    //返回当前对象有哪些特征值
     int characteristics();
 
     /**
@@ -443,6 +449,7 @@ public interface Spliterator<T> {
      * @return {@code true} if all the specified characteristics are present,
      * else {@code false}
      */
+    //是否具有当前特征值
     default boolean hasCharacteristics(int characteristics) {
         return (characteristics() & characteristics) == characteristics;
     }
@@ -461,6 +468,9 @@ public interface Spliterator<T> {
      * @throws IllegalStateException if the spliterator does not report
      *         a characteristic of {@code SORTED}.
      */
+    //如果Spliterator的list是通过Comparator排序的，则返回Comparator
+//如果Spliterator的list是自然排序的 ，则返回null
+//其他情况下抛错
     default Comparator<? super T> getComparator() {
         throw new IllegalStateException();
     }
@@ -596,6 +606,8 @@ public interface Spliterator<T> {
      * @see Spliterator.OfDouble
      * @since 1.8
      */
+    //　Spliterator是一个可分割迭代器(splitable iterator)，可以和iterator顺序遍历迭代器一起看。jdk1.8发布后，对于并行处理的能力大大增强，
+    // Spliterator就是为了并行遍历元素而设计的一个迭代器，jdk1.8中的集合框架中的数据结构都默认实现了spliterator
     public interface OfPrimitive<T, T_CONS, T_SPLITR extends Spliterator.OfPrimitive<T, T_CONS, T_SPLITR>>
             extends Spliterator<T> {
         @Override

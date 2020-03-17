@@ -65,6 +65,11 @@ import java.util.Map.Entry;
  * @since 1.2
  */
 
+/*
+  1. Entry<K,V>  键值对存放地方   entrySet 真正存放键值对的地方
+
+ */
+
 public abstract class AbstractMap<K,V> implements Map<K,V> {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
@@ -815,6 +820,8 @@ public abstract class AbstractMap<K,V> implements Map<K,V> {
          * @return the hash code value for this map entry
          * @see    #equals
          */
+
+        //
         public int hashCode() {
             return (key   == null ? 0 :   key.hashCode()) ^
                    (value == null ? 0 : value.hashCode());

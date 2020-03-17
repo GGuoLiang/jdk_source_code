@@ -127,6 +127,8 @@ import java.util.function.BiFunction;
  * @see     TreeMap
  * @since JDK1.0
  */
+
+//   线程安全的
 public class Hashtable<K,V>
     extends Dictionary<K,V>
     implements Map<K,V>, Cloneable, java.io.Serializable {
@@ -134,6 +136,7 @@ public class Hashtable<K,V>
     /**
      * The hash table data.
      */
+    //  底层结构
     private transient Entry<?,?>[] table;
 
     /**
@@ -177,6 +180,11 @@ public class Hashtable<K,V>
      * @exception  IllegalArgumentException  if the initial capacity is less
      *             than zero, or if the load factor is nonpositive.
      */
+
+    /*
+     initialCapacity
+
+     */
     public Hashtable(int initialCapacity, float loadFactor) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal Capacity: "+
@@ -199,6 +207,7 @@ public class Hashtable<K,V>
      * @exception IllegalArgumentException if the initial capacity is less
      *              than zero.
      */
+    //
     public Hashtable(int initialCapacity) {
         this(initialCapacity, 0.75f);
     }
@@ -207,7 +216,7 @@ public class Hashtable<K,V>
      * Constructs a new, empty hashtable with a default initial capacity (11)
      * and load factor (0.75).
      */
-    //   默认值为11  HashMap默认为16 2的幂次方
+    //   默认值为11  HashMap默认为16 2的幂次方   hasHMap 阈值 16*0.75   12  hasHTable 阈值 11*0.75   8
     public Hashtable() {
         this(11, 0.75f);
     }
@@ -221,6 +230,8 @@ public class Hashtable<K,V>
      * @throws NullPointerException if the specified map is null.
      * @since   1.2
      */
+
+    // 判断参数Map的size（） 在参数Map的size（）的二倍和11  选出一个最大值    负载因子 0.75f
     public Hashtable(Map<? extends K, ? extends V> t) {
         this(Math.max(2*t.size(), 11), 0.75f);
         putAll(t);
@@ -334,7 +345,9 @@ public class Hashtable<K,V>
     public synchronized boolean containsKey(Object key) {
         Entry<?,?> tab[] = table;
         int hash = key.hashCode();
+        // 计算拿到key hash对应的下标
         int index = (hash & 0x7FFFFFFF) % tab.length;
+
         for (Entry<?,?> e = tab[index] ; e != null ; e = e.next) {
             if ((e.hash == hash) && e.key.equals(key)) {
                 return true;
@@ -377,6 +390,7 @@ public class Hashtable<K,V>
      * Attempts to allocate larger arrays may result in
      * OutOfMemoryError: Requested array size exceeds VM limit
      */
+    //Integer.MAX_VALUE =  2147483647 -8
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 
     /**
@@ -396,22 +410,29 @@ public class Hashtable<K,V>
         int newCapacity = (oldCapacity << 1) + 1;
 
         if (newCapacity - MAX_ARRAY_SIZE > 0) {
+            //  原来的size达到最大Integer.MAX_VALUE - 8  是不在扩容
             if (oldCapacity == MAX_ARRAY_SIZE)
                 // Keep running with MAX_ARRAY_SIZE buckets
                 return;
+            //  新的容加到 Integer.MAX_VALUE - 8
             newCapacity = MAX_ARRAY_SIZE;
         }
+
+        //创建新容量的底层数组
         Entry<?,?>[] newMap = new Entry<?,?>[newCapacity];
 
         modCount++;
+        // MAX_ARRAY_SIZE + 1 = 2 147 483 640
+        //
         threshold = (int)Math.min(newCapacity * loadFactor, MAX_ARRAY_SIZE + 1);
         table = newMap;
+
 
         for (int i = oldCapacity ; i-- > 0 ;) {
             for (Entry<K,V> old = (Entry<K,V>)oldMap[i] ; old != null ; ) {
                 Entry<K,V> e = old;
                 old = old.next;
-
+               //    重新的计算新的下标
                 int index = (e.hash & 0x7FFFFFFF) % newCapacity;
                 e.next = (Entry<K,V>)newMap[index];
                 newMap[index] = e;
@@ -458,6 +479,7 @@ public class Hashtable<K,V>
      * @see     Object#equals(Object)
      * @see     #get(Object)
      */
+    //  value  值不能为null  hashMap 可以为空
     public synchronized V put(K key, V value) {
         // Make sure the value is not null
         if (value == null) {
@@ -470,6 +492,7 @@ public class Hashtable<K,V>
         int index = (hash & 0x7FFFFFFF) % tab.length;
         @SuppressWarnings("unchecked")
         Entry<K,V> entry = (Entry<K,V>)tab[index];
+        // key  已经存在  只能替换原来的值  并返回原来的值
         for(; entry != null ; entry = entry.next) {
             if ((entry.hash == hash) && entry.key.equals(key)) {
                 V old = entry.value;
@@ -478,6 +501,7 @@ public class Hashtable<K,V>
             }
         }
 
+        //  新添加的
         addEntry(hash, key, value, index);
         return null;
     }
@@ -501,8 +525,10 @@ public class Hashtable<K,V>
             if ((e.hash == hash) && e.key.equals(key)) {
                 modCount++;
                 if (prev != null) {
+                    // 让的e的前一位 和 e 的后一位关联起来
                     prev.next = e.next;
                 } else {
+                    //  prew == null  即 e 在当前链表的首位  设置首位为 e.next()
                     tab[index] = e.next;
                 }
                 count--;
@@ -523,6 +549,7 @@ public class Hashtable<K,V>
      * @throws NullPointerException if the specified map is null
      * @since 1.2
      */
+    // 线程安全
     public synchronized void putAll(Map<? extends K, ? extends V> t) {
         for (Map.Entry<? extends K, ? extends V> e : t.entrySet())
             put(e.getKey(), e.getValue());
@@ -575,6 +602,7 @@ public class Hashtable<K,V>
      *
      * @return  a string representation of this hashtable
      */
+    //
     public synchronized String toString() {
         int max = size() - 1;
         if (max == -1)
@@ -600,6 +628,7 @@ public class Hashtable<K,V>
 
 
     private <T> Enumeration<T> getEnumeration(int type) {
+        // 数量
         if (count == 0) {
             return Collections.emptyEnumeration();
         } else {
@@ -622,6 +651,12 @@ public class Hashtable<K,V>
      * appropriate view the first time this view is requested.  The views are
      * stateless, so there's no reason to create more than one of each.
      */
+
+
+    //volatile 是一个类型修饰符。volatile 的作用是作为指令关键字，确保本条指令不会因编译器的优化而省略。
+    //保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。（实现可见性）
+    //禁止进行指令重排序。（实现有序性）
+    //volatile 只能保证对单次读/写的原子性。i++ 这种操作不能保证原子性。
     private transient volatile Set<K> keySet;
     private transient volatile Set<Map.Entry<K,V>> entrySet;
     private transient volatile Collection<V> values;
@@ -629,7 +664,7 @@ public class Hashtable<K,V>
     /**
      * Returns a {@link Set} view of the keys contained in this map.
      * The set is backed by the map, so changes to the map are
-     * reflected in the set, and vice-versa.  If the map is modified
+     * reflected（影响） in the set, and vice-versa（反之亦然）.  If the map is modified（修改）
      * while an iteration over the set is in progress (except through
      * the iterator's own <tt>remove</tt> operation), the results of
      * the iteration are undefined.  The set supports element removal,
@@ -795,6 +830,8 @@ public class Hashtable<K,V>
      * @see Map#equals(Object)
      * @since 1.2
      */
+
+    //比较俩个hashTable
     public synchronized boolean equals(Object o) {
         if (o == this)
             return true;
@@ -1234,8 +1271,8 @@ public class Hashtable<K,V>
         count++;
     }
 
-    /**
-     * Hashtable bucket collision list entry
+    /*
+     * 底层
      */
     private static class Entry<K,V> implements Map.Entry<K,V> {
         final int hash;

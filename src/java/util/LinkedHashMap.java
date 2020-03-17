@@ -391,9 +391,11 @@ public class LinkedHashMap<K,V>
      * @param  initialCapacity the initial capacity
      * @param  loadFactor      the load factor
      * @param  accessOrder     the ordering mode - <tt>true</tt> for
-     *         access-order, <tt>false</tt> for insertion-order
+     *         access-order（访问顺序）, <tt>false</tt> for insertion-order（插入顺序）
      * @throws IllegalArgumentException if the initial capacity is negative
      *         or the load factor is nonpositive
+     *
+     *
      */
     public LinkedHashMap(int initialCapacity,
                          float loadFactor,

@@ -117,6 +117,7 @@ public abstract class AbstractSet<E> extends AbstractCollection<E> implements Se
      * @see Object#equals(Object)
      * @see Set#equals(Object)
      */
+    // 得到结婚内部元素的hasCode之和
     public int hashCode() {
         int h = 0;
         Iterator<E> i = iterator();

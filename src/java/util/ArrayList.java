@@ -540,6 +540,8 @@ public class ArrayList<E> extends AbstractList<E>
      * @param index index at which the specified element is to be inserted
      * @param element element to be inserted
      * @throws IndexOutOfBoundsException {@inheritDoc}
+     *
+     *向指定的下标index 插入元素   index 下标之后的元素的自动向后移动
      */
     public void add(int index, E element) {
         rangeCheckForAdd(index);

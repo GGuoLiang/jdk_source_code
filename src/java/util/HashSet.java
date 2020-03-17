@@ -86,6 +86,10 @@ import java.io.InvalidObjectException;
  * @since   1.2
  */
 
+
+/*
+ 1. hashSet  底层为HashMap
+ */
 public class HashSet<E>
     extends AbstractSet<E>
     implements Set<E>, Cloneable, java.io.Serializable
@@ -114,6 +118,8 @@ public class HashSet<E>
      * @param c the collection whose elements are to be placed into this set
      * @throws NullPointerException if the specified collection is null
      */
+
+
     public HashSet(Collection<? extends E> c) {
         map = new HashMap<>(Math.max((int) (c.size()/.75f) + 1, 16));
         addAll(c);

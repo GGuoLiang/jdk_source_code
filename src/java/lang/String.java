@@ -1747,13 +1747,18 @@ public final class String
      * @param   targetOffset offset of the target string.
      * @param   targetCount  count of the target string.
      * @param   fromIndex    the index to begin searching from.
+     *
+     *                       abcbdx cb  first = c
      */
+    // 先查找外层循坏  查找第一个char相等的  在内部循坏查看后面的
     static int indexOf(char[] source, int sourceOffset, int sourceCount,
             char[] target, int targetOffset, int targetCount,
             int fromIndex) {
+        // 开始位置
         if (fromIndex >= sourceCount) {
             return (targetCount == 0 ? sourceCount : -1);
         }
+
         if (fromIndex < 0) {
             fromIndex = 0;
         }

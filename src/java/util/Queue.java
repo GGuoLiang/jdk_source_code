@@ -140,6 +140,15 @@ package java.util;
  * @since 1.5
  * @author Doug Lea
  * @param <E> the type of elements held in this collection
+ *
+ *
+ *
+ *    boolean add(E e);
+ *
+ *    boolean offer(E e);
+ *
+ *
+ *
  */
 public interface Queue<E> extends Collection<E> {
     /**

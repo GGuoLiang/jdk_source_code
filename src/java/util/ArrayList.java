@@ -156,16 +156,16 @@ public class ArrayList<E> extends AbstractList<E>
 
     /**
      * Shared empty array instance  for empty instances.
+     * 有参构造
      */
-    // 有参构造
     private static final Object[] EMPTY_ELEMENTDATA = {};
 
     /**
      * Shared empty array instance used for default sized empty instances. We
      * distinguish this from EMPTY_ELEMENTDATA to know how much to inflate when
      * first element is added.
+     * 无参构造
      */
-    // 无参构造
     private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
 
     /**
@@ -196,7 +196,7 @@ public class ArrayList<E> extends AbstractList<E>
             this.elementData = new Object[initialCapacity];
         } else if (initialCapacity == 0) {
             //  初始化传入值的0 空集合
-            // 当传入得参数值0 1.8 和 1.7区别  1.8  直接使用 EMPTY_ELEMENTDATA固定的空数组标识  1.7 会创建一个空数组this.elementData = new Object[initialCapacity]
+            // 当传入得参数值0 1.8 和 1.7区别  1.8： 直接使用 EMPTY_ELEMENTDATA固定的空数组标识  1.7： 会创建一个空数组this.elementData = new Object[initialCapacity]
             this.elementData = EMPTY_ELEMENTDATA;
         } else {
             throw new IllegalArgumentException("Illegal Capacity: "+
